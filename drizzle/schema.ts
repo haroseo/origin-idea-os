@@ -25,4 +25,58 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const brands = mysqlTable("brands", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 120 }).notNull(),
+  color: varchar("color", { length: 16 }).notNull().default("#A87955"),
+  tone: varchar("tone", { length: 160 }).notNull().default("Quiet confidence"),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const ideas = mysqlTable("ideas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  brandId: int("brandId").notNull(),
+  title: varchar("title", { length: 180 }).notNull(),
+  originalText: text("originalText").notNull(),
+  description: text("description"),
+  tags: text("tags").notNull(),
+  contentHash: varchar("contentHash", { length: 64 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const ideaVersions = mysqlTable("ideaVersions", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  versionNumber: int("versionNumber").notNull(),
+  contentHash: varchar("contentHash", { length: 64 }).notNull(),
+  changeSummary: varchar("changeSummary", { length: 280 }).notNull(),
+  snapshot: text("snapshot").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const radarReports = mysqlTable("radarReports", {
+  id: int("id").autoincrement().primaryKey(),
+  ideaId: int("ideaId").notNull(),
+  userId: int("userId").notNull(),
+  resultJson: text("resultJson").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const creativeAssets = mysqlTable("creativeAssets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  brandId: int("brandId").notNull(),
+  ideaId: int("ideaId"),
+  name: varchar("name", { length: 180 }).notNull(),
+  assetType: mysqlEnum("assetType", ["font", "format", "license"]).notNull(),
+  status: varchar("status", { length: 40 }).notNull().default("ready"),
+  storageKey: varchar("storageKey", { length: 512 }),
+  storageUrl: varchar("storageUrl", { length: 512 }),
+  metadata: text("metadata").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
