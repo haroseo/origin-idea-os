@@ -1,5 +1,5 @@
 import { createFont, woff2 } from "fonteditor-core";
-import { Jimp, JimpMime } from "jimp";
+import Jimp from "jimp";
 import { trace } from "potrace";
 import parseSVG from "svg-path-parser";
 
@@ -26,8 +26,8 @@ async function splitGlyphCells(source: Buffer, columns = 3, rows = 3) {
       const y = Math.floor((row * image.bitmap.height) / rows);
       const nextX = Math.floor(((column + 1) * image.bitmap.width) / columns);
       const nextY = Math.floor(((row + 1) * image.bitmap.height) / rows);
-      const cell = image.clone().crop({ x, y, w: nextX - x, h: nextY - y });
-      cells.push(Buffer.from(await cell.getBuffer(JimpMime.png)));
+      const cell = image.clone().crop(x, y, nextX - x, nextY - y);
+      cells.push(await cell.getBufferAsync(Jimp.MIME_PNG));
     }
   }
   return cells;

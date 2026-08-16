@@ -18,4 +18,7 @@
 - [x] 복붙 자동 입력의 파서·서버 저장 테스트와 반응형 안내 UI를 추가한다.
 
 본 항목은 2026-08-16 요청으로 추가됨.
-- [ ] GitHub private 저장소를 만들고 Origin 완성본 전체를 푸시한다.
+- [x] GitHub private 저장소를 만들고 Origin 완성본 전체를 푸시한다.
+- [x] GitHub 저장소를 public으로 전환한다.
+- [x] Vite·Node/npm용 GitHub Actions CI 워크플로우를 추가한다.
+- [x] npm run check·test·build와 pnpm 기반 CI 설정을 검증한다. npm package-lock 생성은 Jimp 1.x의 workspace 프로토콜 비호환으로 제외하고 Jimp 0.14로 조정했다.
