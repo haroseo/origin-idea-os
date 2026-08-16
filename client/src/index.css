@@ -184,8 +184,10 @@ button:active { transform: scale(0.98); }
 .origin-upload-copy strong { display: block; font-family: "Noto Serif KR", serif; font-size: 17px; font-weight: 600; }
 .origin-upload-copy span { display: block; margin-top: 6px; color: var(--muted-foreground); font-size: 11px; line-height: 1.6; }
 .origin-glyph-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
-.origin-glyph { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--border); border-radius: 8px; background: #fffdf9; font-family: "Noto Serif KR", serif; font-size: 18px; }
-.origin-font-preview { margin-top: 19px; padding: 20px; border: 1px solid var(--border); border-radius: 10px; background: #fffdf9; }
+.origin-glyph { display: grid; width: 40px; height: 40px; place-items: center; overflow: hidden; border: 1px solid var(--border); border-radius: 8px; background: #fffdf9; font-family: "Noto Serif KR", serif; font-size: 18px; }
+.origin-glyph-preview { width: 34px; height: 34px; object-fit: contain; filter: contrast(1.15); }
+.origin-font-preview { margin-top: 19px; padding: 16px 20px 20px; border: 1px solid var(--border); border-radius: 10px; background: #fffdf9; }
+.origin-font-preview span { display: block; margin-bottom: 7px; color: var(--muted-foreground); font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; }
 .origin-font-preview p { margin: 0; font-family: "Noto Serif KR", serif; font-size: clamp(18px, 2.2vw, 28px); letter-spacing: -.055em; }
 .origin-code { overflow: auto; max-height: 320px; margin: 18px 0 0; padding: 15px; border: 1px solid oklch(0.23 0.016 55); border-radius: 10px; color: #e9e0d4; background: #2e2b26; font-family: "DM Mono", monospace; font-size: 10px; line-height: 1.65; white-space: pre-wrap; }
 .origin-license-options { display: grid; gap: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }

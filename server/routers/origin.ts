@@ -4,6 +4,7 @@ import { invokeLLM, listLLMModels } from "../_core/llm";
 import { storagePut } from "../storage";
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { makeFormatFiles, makeLicense } from "../originUtils";
+import { buildHandfont } from "../fontPipeline";
 
 const tagsSchema = z.array(z.string().trim().min(1).max(40)).max(10);
 
@@ -126,19 +127,32 @@ export const originRouter = router({
         const bytes = Buffer.from(input.contentBase64, "base64");
         if (bytes.byteLength > 5_000_000) throw new Error("이미지는 5MB 이하로 업로드해 주세요.");
         const fileName = input.fileName.replace(/[^a-zA-Z0-9._-]/g, "-");
-        const stored = await storagePut(`handfont/${ctx.user.id}/${Date.now()}-${fileName}`, bytes, input.mimeType);
+        const stamp = Date.now();
+        const source = await storagePut(`handfont/${ctx.user.id}/${stamp}-${fileName}`, bytes, input.mimeType);
+        const fontName = fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").replace(/\b\w/g, (character) => character.toUpperCase()) || "Origin Handfont";
+        const generated = await buildHandfont(bytes, fontName);
+        const ttf = await storagePut(`handfont/${ctx.user.id}/${stamp}-${fileName.replace(/\.[^.]+$/, "")}.ttf`, generated.ttf, "font/ttf");
+        const woff2 = await storagePut(`handfont/${ctx.user.id}/${stamp}-${fileName.replace(/\.[^.]+$/, "")}.woff2`, generated.woff2, "font/woff2");
         const asset = await db.createCreativeAsset({
           userId: ctx.user.id,
           brandId: input.brandId,
           ideaId: input.ideaId,
-          name: fileName.replace(/\.[^.]+$/, ""),
+          name: fontName,
           assetType: "font",
-          status: "glyphs-ready",
-          storageKey: stored.key,
-          storageUrl: stored.url,
-          metadata: JSON.stringify({ glyphs: ["가", "나", "다", "A", "B", "C", "1", "2", "3"], source: "handwriting-upload" }),
+          status: "font-ready",
+          storageKey: ttf.key,
+          storageUrl: ttf.url,
+          metadata: JSON.stringify({ glyphs: generated.glyphs, sourceUrl: source.url, woff2Url: woff2.url, source: "handwriting-vectorized" }),
         });
-        return { asset, previewUrl: stored.url, glyphs: ["가", "나", "다", "라", "A", "B", "C", "1", "2", "3"] };
+        return {
+          asset,
+          previewUrl: source.url,
+          ttfUrl: ttf.url,
+          woff2Url: woff2.url,
+          fontName,
+          glyphs: generated.glyphs,
+          glyphPreviews: generated.glyphSvgs.map((svg) => `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`),
+        };
       }),
   }),
   format: router({
