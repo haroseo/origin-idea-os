@@ -154,6 +154,7 @@ export async function createIdea(input: {
   title: string;
   originalText: string;
   description?: string;
+  sourceUrl?: string;
   tags: string[];
 }) {
   const db = await requireDb();
@@ -164,6 +165,7 @@ export async function createIdea(input: {
     title: input.title,
     originalText: input.originalText,
     description: input.description ?? null,
+    sourceUrl: input.sourceUrl ?? null,
     tags: JSON.stringify(input.tags),
     contentHash,
   });

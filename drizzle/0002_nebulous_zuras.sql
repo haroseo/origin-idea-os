@@ -1,0 +1,1 @@
+ALTER TABLE `ideas` ADD COLUMN IF NOT EXISTS `sourceUrl` varchar(2048);

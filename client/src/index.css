@@ -229,3 +229,9 @@ button:active { transform: scale(0.98); }
   .origin-heading { font-size: 31px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+.origin-paste-box { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; padding: 13px 14px; border: 1px solid oklch(0.77 0.04 72); border-radius: 10px; background: linear-gradient(135deg, #f4ecdf, #fbf8f1); }
+.origin-paste-box strong { display: block; margin-top: 3px; color: var(--foreground); font-family: "Noto Serif KR", serif; font-size: 15px; letter-spacing: -.035em; }
+.origin-paste-box p { margin: 4px 0 0; color: var(--muted-foreground); font-size: 10px; line-height: 1.45; }
+.origin-field-hint { margin-left: 5px; color: var(--muted-foreground); font-size: 9px; font-weight: 400; }
+@media (max-width: 640px) { .origin-paste-box { align-items: flex-start; flex-direction: column; } .origin-paste-box .origin-secondary-button { width: 100%; justify-content: center; } }

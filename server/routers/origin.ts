@@ -86,7 +86,7 @@ export const originRouter = router({
   }),
   idea: router({
     create: protectedProcedure
-      .input(z.object({ brandId: z.number().int().positive(), title: z.string().trim().min(2).max(180), originalText: z.string().trim().min(8).max(12000), description: z.string().trim().max(2400).optional(), tags: tagsSchema }))
+      .input(z.object({ brandId: z.number().int().positive(), title: z.string().trim().min(2).max(180), originalText: z.string().trim().min(8).max(12000), description: z.string().trim().max(2400).optional(), sourceUrl: z.string().url().max(2048).optional(), tags: tagsSchema }))
       .mutation(({ ctx, input }) => db.createIdea({ ...input, userId: ctx.user.id })),
     list: protectedProcedure.input(z.object({ brandId: z.number().int().positive() })).query(({ ctx, input }) => db.listIdeasByBrand(ctx.user.id, input.brandId)),
     detail: protectedProcedure.input(z.object({ ideaId: z.number().int().positive() })).query(({ ctx, input }) => db.getIdeaDetail(ctx.user.id, input.ideaId)),

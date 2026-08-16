@@ -43,6 +43,7 @@ export const ideas = mysqlTable("ideas", {
   title: varchar("title", { length: 180 }).notNull(),
   originalText: text("originalText").notNull(),
   description: text("description"),
+  sourceUrl: varchar("sourceUrl", { length: 2048 }),
   tags: text("tags").notNull(),
   contentHash: varchar("contentHash", { length: 64 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

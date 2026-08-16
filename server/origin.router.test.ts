@@ -45,6 +45,13 @@ describe("Origin server router", () => {
     expect(dbMock.createBrand).toHaveBeenCalledWith(expect.objectContaining({ userId: 42, name: "NULY" }));
   });
 
+  it("passes a pasted source URL into Idea ID creation", async () => {
+    dbMock.createIdea.mockResolvedValue({ id: 12, sourceUrl: "https://example.com/reference" });
+    const result = await originRouter.createCaller(createContext()).idea.create({ brandId: 7, title: "붙여넣은 아이디어", originalText: "원본 텍스트가 충분히 긴 아이디어입니다.", description: "자동 분류된 설명", sourceUrl: "https://example.com/reference", tags: ["creator-tool"] });
+    expect(result).toEqual({ id: 12, sourceUrl: "https://example.com/reference" });
+    expect(dbMock.createIdea).toHaveBeenCalledWith(expect.objectContaining({ userId: 42, brandId: 7, sourceUrl: "https://example.com/reference" }));
+  });
+
   it("records an Idea ID update with an authenticated user", async () => {
     dbMock.updateIdea.mockResolvedValue({ id: 9, contentHash: "abc" });
     await originRouter.createCaller(createContext()).idea.update({ ideaId: 9, title: "Origin file", originalText: "This is a complete original idea.", description: "A private asset file.", tags: ["asset"], changeSummary: "문장을 보완했습니다." });
